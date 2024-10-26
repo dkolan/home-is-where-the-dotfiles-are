@@ -1,0 +1,27 @@
+# - name: My first play
+#   hosts: local
+#   tasks:
+#   - name: Install oh-my-zsh
+#     shell: sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+#     args:
+#       creates: ~/.oh-my-zsh
+
+- hosts: localhost
+  connection: local
+  gather_facts: true
+  become: true
+  tasks:
+    - name: "Run macOS  role"
+      include_role:
+        name: macos_role
+      when: ansible_facts['os_family'] == "Darwin"
+
+    - name: "Run Ubuntu role"
+      include_role:
+        name: ubuntu_role
+      when: ansible_facts['distribution'] == "Ubuntu"
+
+    - name: "Run Windows role"
+      include_role:
+        name: windows_role
+      when: ansible_facts['os_family'] == "Windows"
