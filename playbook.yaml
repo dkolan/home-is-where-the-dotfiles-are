@@ -11,9 +11,10 @@
   gather_facts: true
   become: true
   tasks:
-    - name: "Run macOS  role"
+    - name: "Show OS family fact"
       debug:
         var: ansible_facts['os_family']
+    - name: "Run macOS  role"
       include_role:
         name: mac_os
       when: ansible_facts['os_family'] == "Darwin"
