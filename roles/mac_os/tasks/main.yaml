@@ -1,29 +1,24 @@
 - name: Install iTerm2
   command: brew install --cask iterm2
-  become: true
 
 - name: Install Hack Nerd Font
   command: brew install --cask font-hack-nerd-font
-  become: true
 
 - name: Install zoxide
   homebrew:
     name: zoxide
     state: present
-  become: true
 
 - name: Install fzf (fuzzy finder)
   homebrew:
     name: fzf
     state: present
-  become: true
 
 - name: Copy iTerm2 preferences
   copy:
     src: "{{ playbook_dir }}/dotfiles/com.googlecode.iterm2.plist"
     dest: ~/Library/Preferences/com.googlecode.iterm2.plist
     mode: '0644'
-  become: true
 
 - name: Install Oh My Zsh and Powerlevel10k
   ansible.builtin.include_role:
@@ -33,4 +28,3 @@
       - username: "{{ ansible_user_id }}"
     zshrc_src_template: "{{ playbook_dir }}/dotfiles/.zshrc"
     p10k_src_file: "{{ playbook_dir }}/dotfiles/.p10k.zsh"
-  become: true
