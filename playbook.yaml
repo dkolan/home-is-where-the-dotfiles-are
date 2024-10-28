@@ -2,10 +2,6 @@
   connection: local
   gather_facts: true
   tasks:
-    - name: "Show OS family fact"
-      debug:
-        var: ansible_facts['os_family']
-
     - name: "Run macOS role"
       include_role:
         name: mac_os
