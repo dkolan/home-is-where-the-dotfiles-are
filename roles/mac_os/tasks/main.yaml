@@ -1,13 +1,9 @@
 - name: Install iTerm2
-  homebrew_cask:
-    name: iterm2
-    state: present
+  command: brew install --cask iterm2
   become: true
 
 - name: Install Hack Nerd Font
-  homebrew_cask:
-    name: font-hack-nerd-font
-    state: present
+  command: brew install --cask font-hack-nerd-font
   become: true
 
 - name: Install zoxide
