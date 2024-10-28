@@ -28,3 +28,4 @@
       - username: "{{ ansible_user_id }}"
     zshrc_src_template: "{{ playbook_dir }}/dotfiles/.zshrc"
     p10k_src_file: "{{ playbook_dir }}/dotfiles/.p10k.zsh"
+  become: true
