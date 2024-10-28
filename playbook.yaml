@@ -2,6 +2,11 @@
   connection: local
   gather_facts: true
   tasks:
+    - name: Install Ansible Galaxy roles
+      ansible.builtin.command:
+        cmd: ansible-galaxy install -r requirements.yml
+      changed_when: false
+
     - name: "Run macOS role"
       include_role:
         name: mac_os
