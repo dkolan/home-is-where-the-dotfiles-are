@@ -3,6 +3,17 @@
     name: zsh
     state: present
 
+- name: Get the path to zsh
+  ansible.builtin.shell: "which zsh"
+  register: zsh_path
+
+- name: Change default shell to zsh for the current user
+  ansible.builtin.user:
+    name: "{{ ansible_user_id }}"
+    shell: "{{ zsh_path.stdout }}"
+  become: true
+  when: zsh_path.stdout != ""
+
 - name: Install oh-my-zsh plugins
   homebrew:
     name: 
