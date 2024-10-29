@@ -14,13 +14,26 @@
   become: true
   when: zsh_path.stdout != ""
 
+- name: Clone Oh My Zsh repository
+  ansible.builtin.git:
+    repo: https://github.com/ohmyzsh/ohmyzsh.git
+    dest: ~/.oh-my-zsh
+    update: no
+  become: true
+
+- name: Run Oh My Zsh install script
+  ansible.builtin.command: "sh ~/.oh-my-zsh/tools/install.sh --unattended"
+  args:
+    creates: ~/.oh-my-zsh/oh-my-zsh.sh
+  become: true
+
 - name: Install oh-my-zsh plugins
   homebrew:
     name: 
-      zsh-completions,
-      zsh-autosuggestions,
-      zsh-syntax-highlighting,
-      fzf,
-      zoxide
+      - zsh-completions
+      - zsh-autosuggestions
+      - zsh-syntax-highlighting
+      - fzf
+      - zoxide
     state: present
 
