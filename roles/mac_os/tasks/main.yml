@@ -37,3 +37,11 @@
       - zoxide
     state: present
 
+- name: Symlink dotfiles
+  ansible.builtin.file:
+    src: "{{ playbook_dir }}/dotfiles/{{ item }}"
+    dest: "{{ ansible_env.HOME }}/{{ item }}"
+    state: link
+  loop:
+    - .zshrc
+    - .p10k.zsh
