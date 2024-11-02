@@ -17,15 +17,12 @@
 - name: Clone Oh My Zsh repository
   ansible.builtin.git:
     repo: https://github.com/ohmyzsh/ohmyzsh.git
-    dest: ~/.oh-my-zsh
-    update: no
-  become: true
+    dest: "/home/{{ ansible_user_id }}/.oh-my-zsh"
 
-- name: Run Oh My Zsh install script
-  ansible.builtin.command: "sh ~/.oh-my-zsh/tools/install.sh --unattended"
+- name: Run Oh My Zsh install script as the current user
+  ansible.builtin.command: "sh /home/{{ ansible_user_id }}/.oh-my-zsh/tools/install.sh --unattended"
   args:
-    creates: ~/.oh-my-zsh/oh-my-zsh.sh
-  become: true
+    creates: "/home/{{ ansible_user_id }}/.oh-my-zsh/oh-my-zsh.sh"
 
 - name: Install oh-my-zsh plugins
   homebrew:
