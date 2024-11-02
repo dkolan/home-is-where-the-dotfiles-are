@@ -23,9 +23,7 @@
 #   ansible.builtin.command: "sh /Users/{{ ansible_user_id }}/.oh-my-zsh/tools/install.sh --unattended"
 
 - name: Oh-My-Zsh
-  shell: curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh > ~/.oh-my-installer && chmod +x ~/.oh-my-installer && ~/.oh-my-installer
-  when: oh_my_stats.stat.exists == False
-  become_user: theprimeagen
+  shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
 - name: Install oh-my-zsh plugins
   homebrew:
