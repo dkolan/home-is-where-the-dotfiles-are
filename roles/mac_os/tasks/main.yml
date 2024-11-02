@@ -14,15 +14,18 @@
   become: true
   when: zsh_path.stdout != ""
 
-- name: Clone Oh My Zsh repository to the user's home directory
-  ansible.builtin.git:
-    repo: https://github.com/ohmyzsh/ohmyzsh.git
-    dest: "/Users/{{ ansible_user_id }}/.oh-my-zsh"
+# - name: Clone Oh My Zsh repository to the user's home directory
+#   ansible.builtin.git:
+#     repo: https://github.com/ohmyzsh/ohmyzsh.git
+#     dest: "/Users/{{ ansible_user_id }}/.oh-my-zsh"
 
-- name: Run Oh My Zsh install script as the current user
-  ansible.builtin.command: "sh /Users/{{ ansible_user_id }}/.oh-my-zsh/tools/install.sh --unattended"
+# - name: Run Oh My Zsh install script as the current user
+#   ansible.builtin.command: "sh /Users/{{ ansible_user_id }}/.oh-my-zsh/tools/install.sh --unattended"
+
+- name: Install Oh My Zsh
+  ansible.builtin.command: "sh -c '$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)'"
   args:
-    creates: "/Users/{{ ansible_user_id }}/.zcompdump-{{ ansible_hostname }}-{{ ansible_distribution_version }}"
+    creates: "/Users/{{ ansible_user_id }}/.oh-my-zsh"
 
 - name: Install oh-my-zsh plugins
   homebrew:
