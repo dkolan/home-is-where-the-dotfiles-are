@@ -38,13 +38,7 @@
     src: "/opt/homebrew/share/zsh-autosuggestions"
     dest: "{{ ansible_env.HOME }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
     state: link
-
-- name: Symlink powerlevel10k theme to Oh My Zsh custom themes
-  ansible.builtin.file:
-    src: "/opt/homebrew/opt/powerlevel10k"
-    dest: "{{ ansible_env.HOME }}/.oh-my-zsh/custom/themes/powerlevel10k"
-    state: link
-
+    
 - name: Manage dotfiles
   block:
     - name: Check if existing dotfile is a symlink
