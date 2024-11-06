@@ -124,6 +124,20 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
+#zsh-completions
+if type brew &>/dev/null; then
+  FPATH=$(brew --prefix)/opt/zsh-completions:$FPATH
+
+  autoload -Uz compinit
+  compinit
+fi
+
+# zsh-autosuggestions
+source $HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+# zsh-syntax-highlighting
+source $HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
 # fzf
 source <(fzf --zsh)
 
