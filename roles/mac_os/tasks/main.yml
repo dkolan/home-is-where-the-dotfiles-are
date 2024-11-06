@@ -17,27 +17,30 @@
 - name: Oh-My-Zsh
   shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
+- name: Install zsh-autosuggestions plugin
+  ansible.builtin.git:
+    repo: https://github.com/zsh-users/zsh-autosuggestions
+    dest: ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+    depth: 1
+ 
+- name: Install zsh-completions plugin
+  ansible.builtin.git:
+    repo: https://github.com/zsh-users/zsh-completions
+    dest: ~/.oh-my-zsh/custom/plugins/zsh-completions
+    depth: 1
+ 
+- name: Install zsh-syntax-highlighting plugin
+  ansible.builtin.git:
+    repo: https://github.com/zsh-users/zsh-syntax-highlighting.git
+    dest: ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+    depth: 1
+
 - name: Install oh-my-zsh plugins
   homebrew:
     name: 
-      - zsh-completions
-      - zsh-autosuggestions
-      - zsh-syntax-highlighting
       - fzf
       - zoxide
     state: present
-
-- name: Symlink zsh-syntax-highlighting plugin
-  ansible.builtin.file:
-    src: "/opt/homebrew/opt/zsh-syntax-highlighting"
-    dest: "{{ ansible_env.HOME }}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
-    state: link
-
-- name: Symlink zsh-autosuggestions plugin
-  ansible.builtin.file:
-    src: "/opt/homebrew/opt/zsh-autosuggestions"
-    dest: "{{ ansible_env.HOME }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
-    state: link
     
 - name: Manage dotfiles
   block:
