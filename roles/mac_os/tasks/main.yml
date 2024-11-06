@@ -27,15 +27,15 @@
       - zoxide
     state: present
 
-- name: Symlink zsh-syntax-highlighting plugin to Oh My Zsh custom plugins
+- name: Symlink zsh-syntax-highlighting plugin
   ansible.builtin.file:
-    src: "/opt/homebrew/share/zsh-syntax-highlighting"
+    src: "/opt/homebrew/opt/zsh-syntax-highlighting"
     dest: "{{ ansible_env.HOME }}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
     state: link
 
-- name: Symlink zsh-autosuggestions plugin to Oh My Zsh custom plugins
+- name: Symlink zsh-autosuggestions plugin
   ansible.builtin.file:
-    src: "/opt/homebrew/share/zsh-autosuggestions"
+    src: "/opt/homebrew/opt/zsh-autosuggestions"
     dest: "{{ ansible_env.HOME }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
     state: link
     
