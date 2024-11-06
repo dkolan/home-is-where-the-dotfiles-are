@@ -83,6 +83,15 @@ plugins=(
   zsh-autosuggestions
 )
 
+# zsh-autosuggestions
+source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+# zsh-syntax-highlighting
+source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# zsh-completions
+fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
+
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
@@ -131,12 +140,6 @@ if type brew &>/dev/null; then
   autoload -Uz compinit
   compinit
 fi
-
-# zsh-autosuggestions
-source $HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-
-# zsh-syntax-highlighting
-source $HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # fzf
 source <(fzf --zsh)
