@@ -47,7 +47,7 @@ DerivePointerAlignment: false
 PointerAlignment: Left                   # Keeps pointer on left side, e.g., int* ptr
 
 # Formatting for control structures
-IndentCaseLabels: false                  # Case labels are unindented
+IndentCaseLabels: true                  # Case labels are unindented
 AllowShortIfStatementsOnASingleLine: Never
 AllowShortLoopsOnASingleLine: false
 AllowShortBlocksOnASingleLine: false     # Forces braces on single-line control bodies
