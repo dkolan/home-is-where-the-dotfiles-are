@@ -1,17 +1,23 @@
 - name: Install Homebrew Packages
   homebrew:
     name:
-      - fish
       - btop
+      - cmake
+      - ffmpeg
+      - fzf
+      - neovim
+      - nushell
+      - pandoc
+      - uv
+      - yt-dlp
+      - zoxide
     state: present
 
-- name: Get the path to fish
-  ansible.builtin.shell: "which fish"
-  register: fish_path
-
-- name: Change default shell to fish for the current user
-  ansible.builtin.user:
-    name: "{{ ansible_user_id }}"
-    shell: "{{ fish_path.stdout }}"
-  become: true
-  when: fish_path.stdout != ""
+- name: Install casks
+  community.general.homebrew_cask:
+    name:
+      - cyberduck
+      - firefox
+      - handbrake
+      - keka
+    state: present
