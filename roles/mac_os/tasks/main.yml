@@ -8,6 +8,7 @@
       - neovim
       - nushell
       - pandoc
+      - starship
       - uv
       - yt-dlp
       - zoxide
@@ -16,8 +17,19 @@
 - name: Install casks
   community.general.homebrew_cask:
     name:
+      - bitwarden
       - cyberduck
       - firefox
+      - font-jetbrains-mono-nerd-font
       - handbrake
+      - iterm2
       - keka
+      - visual-studio-code
     state: present
+
+- name: Install Xcode Command Line Tools
+  ansible.builtin.command:
+    cmd: xcode-select --install
+  args:
+    creates: /Library/Developer/CommandLineTools
+  register: xcode_install_output
