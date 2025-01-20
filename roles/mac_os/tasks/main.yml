@@ -10,7 +10,6 @@
       - go
       - mas
       - neovim
-      - nushell
       - pandoc
       - rust
       - uv
