@@ -1,21 +1,21 @@
-- name: Install Homebrew Packages
-  homebrew:
-    name:
-      - btop
-      - cmake
-      - docker
-      - ffmpeg
-      - fish
-      - fzf
-      - go
-      - mas
-      - neovim
-      - pandoc
-      - rust
-      - uv
-      - yt-dlp
-      - zoxide
-    state: present
+# - name: Install Homebrew Packages
+#   homebrew:
+#     name:
+#       - btop
+#       - cmake
+#       - docker
+#       - ffmpeg
+#       - fish
+#       - fzf
+#       - go
+#       - mas
+#       - neovim
+#       - pandoc
+#       - rust
+#       - uv
+#       - yt-dlp
+#       - zoxide
+#     state: present
 
 - name: Install casks
   community.general.homebrew_cask:
