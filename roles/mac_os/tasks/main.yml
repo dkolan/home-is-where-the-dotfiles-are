@@ -3,12 +3,16 @@
     name:
       - btop
       - cmake
+      - docker
       - ffmpeg
+      - fish
       - fzf
+      - go
+      - mas
       - neovim
       - nushell
       - pandoc
-      - starship
+      - rust
       - uv
       - yt-dlp
       - zoxide
@@ -19,12 +23,18 @@
     name:
       - bitwarden
       - cyberduck
+      - discord
       - firefox
       - font-jetbrains-mono-nerd-font
+      - ghostty
       - handbrake
-      - iterm2
       - keka
+      - lulu
+      - obsidian
+      - private-internet-access
+      - vlc
       - visual-studio-code
+      - wireshark
     state: present
 
 - name: Install Xcode Command Line Tools
@@ -33,3 +43,21 @@
   args:
     creates: /Library/Developer/CommandLineTools
   register: xcode_install_output
+
+- name: Open the Mac App Store
+  ansible.builtin.command:
+    cmd: open -a "App Store"
+  ignore_errors: true
+  register: app_store_open
+
+- name: Confirm App Store login
+  pause:
+    prompt: |
+      Please log in to the Mac App Store manually.
+      Press 'Enter' once you are logged in.
+
+- name: Install App Store Apps
+  community.general.mas:
+    id:
+      - 288419283 # RadarScope
+    state: present
