@@ -1,0 +1,32 @@
+- name: Install required Chocolatey packages
+  win_chocolatey:
+    name:
+      - firefox
+      - kb2999226
+      - 7zip
+      - git
+      - vlc
+      - vscode
+      - powershell-core
+      - wireshark
+      - ninja
+      - wiztree
+      - greenshot
+      - gsudo
+      - cmake
+      - bat
+      - less
+      - llvm
+      - pandoc
+      - visualstudio2022professional
+      - uv
+      - epicgameslauncher
+      - obsidian
+      - powertoys
+      - zoxide
+      - fzf
+      - oh-my-posh
+      - poshgit
+      - tree
+      
+    state: present
