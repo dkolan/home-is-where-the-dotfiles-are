@@ -1,32 +1,39 @@
-- name: Install required Chocolatey packages
-  win_chocolatey:
-    name:
-      - firefox
-      - kb2999226
-      - 7zip
-      - git
-      - vlc
-      - vscode
-      - powershell-core
-      - wireshark
-      - ninja
-      - wiztree
-      - greenshot
-      - gsudo
-      - cmake
-      - bat
-      - less
-      - llvm
-      - pandoc
-      - visualstudio2022professional
-      - uv
-      - epicgameslauncher
-      - obsidian
-      - powertoys
-      - zoxide
-      - fzf
-      - oh-my-posh
-      - poshgit
-      - tree
-      
+- name: Install Chocolatey packages
+  loop:
+    - firefox
+    - kb2999226
+    - 7zip
+    - git
+    - vlc
+    - vscode
+    - powershell-core
+    - wireshark
+    - ninja
+    - wiztree
+    - greenshot
+    - gsudo
+    - cmake
+    - bat
+    - less
+    - llvm
+    - pandoc
+    - visualstudio2022professional
+    - uv
+    - epicgameslauncher
+    - obsidian
+    - powertoys
+    - zoxide
+    - fzf
+    - oh-my-posh
+    - poshgit
+    - tree
+  ansible.builtin.win_chocolatey:
+    name: "{{ item }}"
     state: present
+  loop_control:
+    label: "{{ item }}"
+  register: choco_results
+
+- name: Display installation results
+  debug:
+    var: choco_results
