@@ -1,68 +1,61 @@
-- name: Install oh-my-zsh
+- name: Install Homebrew Packages
   homebrew:
-    name: zsh
-    state: present
-
-- name: Get the path to zsh
-  ansible.builtin.shell: "which zsh"
-  register: zsh_path
-
-- name: Change default shell to zsh for the current user
-  ansible.builtin.user:
-    name: "{{ ansible_user_id }}"
-    shell: "{{ zsh_path.stdout }}"
-  become: true
-  when: zsh_path.stdout != ""
-
-- name: Oh-My-Zsh
-  shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-
-- name: Install zsh-autosuggestions plugin
-  ansible.builtin.git:
-    repo: https://github.com/zsh-users/zsh-autosuggestions
-    dest: ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
-    depth: 1
- 
-- name: Install zsh-completions plugin
-  ansible.builtin.git:
-    repo: https://github.com/zsh-users/zsh-completions
-    dest: ~/.oh-my-zsh/custom/plugins/zsh-completions
-    depth: 1
- 
-- name: Install zsh-syntax-highlighting plugin
-  ansible.builtin.git:
-    repo: https://github.com/zsh-users/zsh-syntax-highlighting.git
-    dest: ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
-    depth: 1
-
-- name: Install oh-my-zsh plugins
-  homebrew:
-    name: 
+    name:
+      - btop
+      - cmake
+      - docker
+      - ffmpeg
+      - fish
       - fzf
+      - go
+      - mas
+      - neovim
+      - pandoc
+      - rust
+      - uv
+      - yt-dlp
       - zoxide
     state: present
-    
-- name: Manage dotfiles
-  block:
-    - name: Check if existing dotfile is a symlink
-      ansible.builtin.stat:
-        path: "{{ ansible_env.HOME }}/{{ item }}"
-      register: dotfile_stat
-      loop: "{{ dotfiles }}"
 
-    - name: Remove existing dotfile if it is not a symlink
-      ansible.builtin.file:
-        path: "{{ ansible_env.HOME }}/{{ item }}"
-        state: absent
-      loop: "{{ dotfiles }}"
+- name: Install casks
+  community.general.homebrew_cask:
+    name:
+      - bitwarden
+      - cyberduck
+      - discord
+      - firefox
+      - font-jetbrains-mono-nerd-font
+      - ghostty
+      - handbrake
+      - keka
+      - lulu
+      - obsidian
+      - vlc
+      - visual-studio-code
+      - wireshark
+    state: present
 
-    - name: Symlink dotfiles
-      ansible.builtin.file:
-        src: "{{ playbook_dir }}/dotfiles/{{ item }}"
-        dest: "{{ ansible_env.HOME }}/{{ item }}"
-        state: link
-      loop: "{{ dotfiles }}"
-  vars:
-    dotfiles:
-      - .zshrc
-      - .p10k.zsh
+- name: Install Xcode Command Line Tools
+  ansible.builtin.command:
+    cmd: xcode-select --install
+  args:
+    creates: /Library/Developer/CommandLineTools
+  register: xcode_install_output
+
+- name: Open the Mac App Store
+  ansible.builtin.command:
+    cmd: open -a "App Store"
+  ignore_errors: true
+  register: app_store_open
+
+- name: Confirm App Store login
+  pause:
+    prompt: |
+      Please log in to the Mac App Store manually.
+      Press 'Enter' once you are logged in.
+
+- name: Install App Store Apps
+  community.general.mas:
+    id:
+      - 288419283 # RadarScope
+    state: present
