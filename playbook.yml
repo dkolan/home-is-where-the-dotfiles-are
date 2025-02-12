@@ -19,5 +19,5 @@
 
     - name: "Run Windows role"
       include_role:
-        name: windows
+        name: windows_11
       when: ansible_facts['os_family'] == "Windows"
