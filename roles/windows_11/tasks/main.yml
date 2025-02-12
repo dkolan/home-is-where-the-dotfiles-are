@@ -1,4 +1,4 @@
-- name: Install Chocolatey packages
+- name: Install Chocolatey packages with verbosity
   loop:
     - firefox
     - kb2999226
@@ -30,6 +30,7 @@
   ansible.builtin.win_chocolatey:
     name: "{{ item }}"
     state: present
+    params: "--verbose"
   loop_control:
     label: "{{ item }}"
   register: choco_results
