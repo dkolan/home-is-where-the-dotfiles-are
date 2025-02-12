@@ -1,0 +1,14 @@
+[filter "lfs"]
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+[http]
+	sslVerify = false
+[user]
+	name = Dan Kolan
+	email = {{ git_email }}
+[credential "https://repo.torchtechnologies.com"]
+	provider = bitbucket
+[core]
+	autocrlf = input

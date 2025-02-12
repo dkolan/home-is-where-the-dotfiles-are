@@ -1,0 +1,10 @@
+---
+- name: Ubuntu (Work)
+  hosts: localhost
+  vars:
+    home: "{{ lookup('env', 'HOME') }}"
+    user: "{{ lookup('env', 'USER') }}"
+    git_email: "dan.kolan@torchtechnologies.com"
+  connection: local
+  roles:
+    - ubuntu

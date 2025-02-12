@@ -1,0 +1,10 @@
+---
+- name: OS X
+  hosts: localhost
+  vars:
+    home: "{{ lookup('env', 'HOME') }}"
+    user: "{{ lookup('env', 'USER') }}"
+    git_email: "dan.kolan@gmail.com"
+  connection: local
+  roles:
+    - mac_os

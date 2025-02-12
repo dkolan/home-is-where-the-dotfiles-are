@@ -1,32 +1,121 @@
-- name: Install required Chocolatey packages
-  win_chocolatey:
-    name:
-      - firefox
-      - kb2999226
-      - 7zip
-      - git
-      - vlc
-      - vscode
-      - powershell-core
-      - wireshark
-      - ninja
-      - wiztree
-      - greenshot
-      - gsudo
-      - cmake
-      - bat
-      - less
-      - llvm
-      - pandoc
-      - visualstudio2022professional
-      - uv
-      - epicgameslauncher
-      - obsidian
-      - powertoys
-      - zoxide
-      - fzf
-      - oh-my-posh
-      - poshgit
-      - tree
-      
+- name: Enable Dark Mode for Windows 11
+  ansible.windows.win_regedit:
+    path: HKCU:\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize
+    name: AppsUseLightTheme
+    type: dword
+    data: 0
+
+- name: Enable Dark Mode for Windows System UI
+  ansible.windows.win_regedit:
+    path: HKCU:\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize
+    name: SystemUsesLightTheme
+    type: dword
+    data: 0
+
+- name: Set taskbar settings (align left, disable Copilot, Widgets, Task View)
+  ansible.windows.win_regedit:
+    path: HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+    name: "{{ item.name }}"
+    type: dword
+    data: "{{ item.value }}"
+  loop:
+    - { name: "TaskbarAl", value: 0 }
+    - { name: "ShowCopilotButton", value: 0 }
+    - { name: "TaskbarDa", value: 0 }
+    - { name: "ShowTaskViewButton", value: 0 }
+
+- name: Restart Windows Explorer to apply taskbar changes
+  ansible.windows.win_shell: |
+    Stop-Process -Name explorer -Force
+
+- name: Install Chocolatey packages
+  ignore_errors: yes
+  loop:
+    - 7zip
+    - bat
+    - cmake
+    - epicgameslauncher
+    - firefox
+    - fzf
+    - git
+    # - greenshot # failing
+    - gsudo
+    - kb2999226
+    - llvm
+    - ninja
+    - obsidian
+    - oh-my-posh
+    - pandoc
+    - powershell-core
+    - powertoys
+    - tree
+    - uv
+    - vlc
+    - vscodium
+    - wireshark
+    - wiztree
+    - zoxide
+  ansible.builtin.win_chocolatey:
+    name: "{{ item }}"
     state: present
+    params: "-y --verbose --accept-license"
+  loop_control:
+    label: "{{ item }}"
+  register: choco_results
+
+- name: Install Visual Studio Professional 2022
+  win_chocolatey:
+    name: visualstudio2022professional
+    state: present
+    package_params: "--quiet --wait --norestart --includeRecommended --nocache"
+
+- name: Install PowerShell Modules
+  loop:
+    - PowerShellGet -Force -AllowClobber
+    - Microsoft.PowerShell.PSResourceGet -Repository PSGallery
+    - PSReadLine
+    - posh-git -Scope CurrentUser -Force
+    - git-aliases -Scope CurrentUser -AllowClobber -Force
+  ansible.windows.win_shell: |
+    Install-Module {{ item }}
+  args:
+    executable: pwsh.exe
+  loop_control:
+    label: "{{ item }}"
+  register: ps_modules_results
+
+- name: Download MesloLGS NF font
+  ansible.windows.win_get_url:
+    url: "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Meslo.zip"
+    dest: "C:\\Windows\\Temp\\Meslo.zip"
+
+- name: Extract MesloLGS NF font
+  ansible.windows.win_shell: |
+    Expand-Archive -Path C:\Windows\Temp\Meslo.zip -DestinationPath C:\Windows\Fonts -Force
+
+- name: Install MesloLGS NF font
+  ansible.windows.win_shell: |
+    $fonts = Get-ChildItem -Path "C:\Windows\Fonts\MesloLGS NF*.ttf"
+    ForEach ($font in $fonts) {
+        New-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts" -Name $font.Name -Value $font.FullName -PropertyType String -Force
+    }
+
+- name: Ensure PowerShell profile directory exists
+  ansible.builtin.win_file:
+    path: "C:\\Users\\{{ ansible_env.USERNAME }}\\Documents\\PowerShell"
+    state: directory
+
+- name: Copy PowerShell profile to user directory
+  ansible.builtin.win_copy:
+    src: "{{ playbook_dir }}/../dotfiles/Microsoft.PowerShell_profile.ps1"
+    dest: "C:\\Users\\{{ ansible_env.USERNAME }}\\Documents\\PowerShell\\Microsoft.PowerShell_profile.ps1"
+    force: yes
+
+- name: Generate templates
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "655"
+  loop:
+    - src:  "{{ playbook_dir }}/../templates/.gitconfig"
+      dest: "C:\\Users\\{{ ansible_env.USERNAME }}\\.gitconfig"
