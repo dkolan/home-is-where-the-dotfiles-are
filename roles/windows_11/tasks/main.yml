@@ -1,4 +1,4 @@
-- name: Install Chocolatey packages with verbosity
+- name: Install Chocolatey packages
   loop:
     - firefox
     - kb2999226
@@ -34,15 +34,6 @@
   loop_control:
     label: "{{ item }}"
   register: choco_results
-  changed_when: "'installed' in choco_results.stdout or 'already installed' in choco_results.stdout"
-
-- name: Confirm installation of each package
-  ansible.builtin.debug:
-    msg: "✅ Installed: {{ item.item }}"
-  loop: "{{ choco_results.results }}"
-  loop_control:
-    label: "{{ item.item }}"
-  when: item is changed
 
 - name: Install PowerShell Modules
   loop:
