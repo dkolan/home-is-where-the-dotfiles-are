@@ -10,7 +10,7 @@
     - wireshark
     - ninja
     - wiztree
-    # - greenshot # removed because it is currently failing
+    - greenshot # removed because it is currently failing
     - gsudo
     - cmake
     - bat
@@ -31,9 +31,6 @@
     name: "{{ item }}"
     state: present
     params: "-y --verbose --accept-license"
-  become: yes
-  become_method: runas
-  become_user: Administrator
   loop_control:
     label: "{{ item }}"
   register: choco_results
