@@ -1,54 +1,54 @@
-# - name: Install Chocolatey packages
-#   ignore_errors: yes
-#   loop:
-#     - firefox
-#     - kb2999226
-#     - 7zip
-#     - git
-#     - vlc
-#     # - vscode
-#     - vscodium
-#     - powershell-core
-#     - wireshark
-#     - ninja
-#     - wiztree
-#     # - greenshot # removed because it is currently failing
-#     - gsudo
-#     - cmake
-#     - bat
-#     - less
-#     - llvm
-#     - pandoc
-#     # - visualstudio2022professional # failed
-#     - uv
-#     - epicgameslauncher
-#     - obsidian
-#     - powertoys
-#     - zoxide
-#     - fzf
-#     - oh-my-posh
-#     - poshgit
-#     - tree
-#   ansible.builtin.win_chocolatey:
-#     name: "{{ item }}"
-#     state: present
-#     params: "-y --verbose --accept-license"
-#   loop_control:
-#     label: "{{ item }}"
-#   register: choco_results
+- name: Install Chocolatey packages
+  ignore_errors: yes
+  loop:
+    - firefox
+    - kb2999226
+    - 7zip
+    - git
+    - vlc
+    # - vscode
+    - vscodium
+    - powershell-core
+    - wireshark
+    - ninja
+    - wiztree
+    # - greenshot # removed because it is currently failing
+    - gsudo
+    - cmake
+    - bat
+    - less
+    - llvm
+    - pandoc
+    # - visualstudio2022professional # failed
+    - uv
+    - epicgameslauncher
+    - obsidian
+    - powertoys
+    - zoxide
+    - fzf
+    - oh-my-posh
+    - poshgit
+    - tree
+  ansible.builtin.win_chocolatey:
+    name: "{{ item }}"
+    state: present
+    params: "-y --verbose --accept-license"
+  loop_control:
+    label: "{{ item }}"
+  register: choco_results
 
-# - name: Install PowerShell Modules
-#   loop:
-#     - PowerShellGet -Force -AllowClobber
-#     - Microsoft.PowerShell.PSResourceGet -Repository PSGallery
-#     - PSReadLine
-#   ansible.windows.win_shell: |
-#     Install-Module {{ item }}
-#   args:
-#     executable: pwsh.exe
-#   loop_control:
-#     label: "{{ item }}"
-#   register: ps_modules_results
+- name: Install PowerShell Modules
+  loop:
+    - PowerShellGet -Force -AllowClobber
+    - Microsoft.PowerShell.PSResourceGet -Repository PSGallery
+    - PSReadLine
+  ansible.windows.win_shell: |
+    Install-Module {{ item }}
+  args:
+    executable: pwsh.exe
+  loop_control:
+    label: "{{ item }}"
+  register: ps_modules_results
 
 - name: Ensure PowerShell profile directory exists
   ansible.builtin.win_file:
@@ -67,5 +67,5 @@
     dest: "{{ item.dest }}"
     mode: "655"
   loop:
-    - src:  "{{ playbook_dir }}/templates/.gitconfig"
+    - src:  "{{ playbook_dir }}/../templates/.gitconfig"
       dest: "C:\\Users\\{{ ansible_env.USERNAME }}\\.gitconfig"
