@@ -1,0 +1,8 @@
+---
+- name: Windows (Work))
+  hosts: windows
+  vars:
+    git_email: "dan.kolan@torchtechnologies.com"
+  gather_facts: true
+  roles:
+    - windows_11
