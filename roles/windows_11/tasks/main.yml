@@ -1,4 +1,4 @@
-- name: Install Chocolatey packages
+- name: Install Chocolatey packages as Administrator
   loop:
     - firefox
     - kb2999226
@@ -30,7 +30,9 @@
   ansible.builtin.win_chocolatey:
     name: "{{ item }}"
     state: present
-    params: "-y --verbose"
+    params: "-y --verbose --accept-license"
+  become: yes
+  become_method: runas
   loop_control:
     label: "{{ item }}"
   register: choco_results
