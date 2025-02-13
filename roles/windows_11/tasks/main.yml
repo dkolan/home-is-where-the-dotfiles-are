@@ -5,12 +5,13 @@
     - 7zip
     - git
     - vlc
-    - vscode
+    # - vscode
+    - vscodium
     - powershell-core
     - wireshark
     - ninja
     - wiztree
-    - greenshot # removed because it is currently failing
+    # - greenshot # removed because it is currently failing
     - gsudo
     - cmake
     - bat
