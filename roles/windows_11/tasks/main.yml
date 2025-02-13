@@ -1,4 +1,50 @@
-- name: Install Chocolatey packages with verbosity
+# - name: Install Chocolatey packages with verbosity
+#   loop:
+#     - firefox
+#     - kb2999226
+#     - 7zip
+#     - git
+#     - vlc
+#     - vscode
+#     - powershell-core
+#     - wireshark
+#     - ninja
+#     - wiztree
+#     - greenshot
+#     - gsudo
+#     - cmake
+#     - bat
+#     - less
+#     - llvm
+#     - pandoc
+#     - visualstudio2022professional
+#     - uv
+#     - epicgameslauncher
+#     - obsidian
+#     - powertoys
+#     - zoxide
+#     - fzf
+#     - oh-my-posh
+#     - poshgit
+#     - tree
+#   ansible.builtin.win_chocolatey:
+#     name: "{{ item }}"
+#     state: present
+#     params: "-y --verbose"
+#   loop_control:
+#     label: "{{ item }}"
+#   register: choco_results
+#   changed_when: "'installed' in choco_results.stdout or 'already installed' in choco_results.stdout"
+
+# - name: Confirm installation of each package
+#   ansible.builtin.debug:
+#     msg: "✅ Installed: {{ item.item }}"
+#   loop: "{{ choco_results.results }}"
+#   loop_control:
+#     label: "{{ item.item }}"
+#   when: item is changed
+
+- name: Install Chocolatey packages with real-time output
   loop:
     - firefox
     - kb2999226
@@ -27,13 +73,11 @@
     - oh-my-posh
     - poshgit
     - tree
-  ansible.builtin.win_chocolatey:
-    name: "{{ item }}"
-    state: present
-    params: "-y --verbose"
+  ansible.windows.win_command: choco install {{ item }} -y --verbose
+  register: choco_results
+  changed_when: "'installed' in choco_results.stdout or 'already installed' in choco_results.stdout"
   loop_control:
     label: "{{ item }}"
-  register: choco_results
 
 - name: Install PowerShell Modules
   loop:
