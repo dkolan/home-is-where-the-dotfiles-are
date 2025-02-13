@@ -30,11 +30,31 @@
   ansible.builtin.win_chocolatey:
     name: "{{ item }}"
     state: present
-    params: "--verbose"
+    params: "-y --verbose"
   loop_control:
     label: "{{ item }}"
   register: choco_results
 
-- name: Display installation results
-  debug:
-    var: choco_results
+- name: Install PowerShell Modules
+  loop:
+    - PowerShellGet -Force -AllowClobber
+    - Microsoft.PowerShell.PSResourceGet -Repository PSGallery
+    - PSReadLine
+  ansible.windows.win_shell: |
+    Install-Module {{ item }}
+  args:
+    executable: pwsh.exe
+  loop_control:
+    label: "{{ item }}"
+  register: ps_modules_results
+
+- name: Ensure PowerShell profile directory exists
+  ansible.builtin.win_file:
+    path: "C:\\Users\\{{ ansible_env.USERNAME }}\\Documents\\PowerShell"
+    state: directory
+
+- name: Copy PowerShell profile to user directory
+  ansible.builtin.win_copy:
+    src: "dotfiles/Microsoft.PowerShell_profile.ps1"
+    dest: "C:\\Users\\{{ ansible_env.USERNAME }}\\Documents\\PowerShell\\Microsoft.PowerShell_profile.ps1"
+    force: yes
