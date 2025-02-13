@@ -10,7 +10,7 @@
     - wireshark
     - ninja
     - wiztree
-    - greenshot
+    # - greenshot # removed because it is currently failing
     - gsudo
     - cmake
     - bat
