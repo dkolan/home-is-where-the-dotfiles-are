@@ -27,7 +27,7 @@
 #     - zoxide
 #     - fzf
 #     - oh-my-posh
-#     - poshgit
+#     # - poshgit
 #     - tree
 #   ansible.builtin.win_chocolatey:
 #     name: "{{ item }}"
@@ -37,29 +37,57 @@
 #     label: "{{ item }}"
 #   register: choco_results
 
-# - name: Install PowerShell Modules
-#   loop:
-#     - PowerShellGet -Force -AllowClobber
-#     - Microsoft.PowerShell.PSResourceGet -Repository PSGallery
-#     - PSReadLine
-#   ansible.windows.win_shell: |
-#     Install-Module {{ item }}
-#   args:
-#     executable: pwsh.exe
-#   loop_control:
-#     label: "{{ item }}"
-#   register: ps_modules_results
+- name: Install PowerShell Modules
+  loop:
+    - PowerShellGet -Force -AllowClobber
+    - Microsoft.PowerShell.PSResourceGet -Repository PSGallery
+    - PSReadLine
+    - posh-git -Scope CurrentUser -Force
+    - git-aliases -Scope CurrentUser -AllowClobber
+  ansible.windows.win_shell: |
+    Install-Module {{ item }}
+  args:
+    executable: pwsh.exe
+  loop_control:
+    label: "{{ item }}"
+  register: ps_modules_results
 
-# - name: Ensure PowerShell profile directory exists
-#   ansible.builtin.win_file:
-#     path: "C:\\Users\\{{ ansible_env.USERNAME }}\\Documents\\PowerShell"
-#     state: directory
+- name: Ensure PowerShell profile directory exists
+  ansible.builtin.win_file:
+    path: "C:\\Users\\{{ ansible_env.USERNAME }}\\Documents\\PowerShell"
+    state: directory
 
-# - name: Copy PowerShell profile to user directory
-#   ansible.builtin.win_copy:
-#     src: "{{ playbook_dir }}/../dotfiles/Microsoft.PowerShell_profile.ps1"
-#     dest: "C:\\Users\\{{ ansible_env.USERNAME }}\\Documents\\PowerShell\\Microsoft.PowerShell_profile.ps1"
-#     force: yes
+- name: Copy PowerShell profile to user directory
+  ansible.builtin.win_copy:
+    src: "{{ playbook_dir }}/../dotfiles/Microsoft.PowerShell_profile.ps1"
+    dest: "C:\\Users\\{{ ansible_env.USERNAME }}\\Documents\\PowerShell\\Microsoft.PowerShell_profile.ps1"
+    force: yes
+
+- name: Ensure Windows font directory exists
+  ansible.builtin.win_file:
+    path: "C:\\Windows\\Fonts"
+    state: directory
+
+- name: Download JetBrains Mono Nerd Font ZIP
+  ansible.windows.win_get_url:
+    url: "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip"
+    dest: "C:\\Windows\\Temp\\JetBrainsMono.zip"
+    force: yes
+
+- name: Extract Nerd Font to Windows Fonts directory
+  ansible.windows.win_unzip:
+    src: "C:\\Windows\\Temp\\JetBrainsMono.zip"
+    dest: "C:\\Windows\\Fonts"
+    delete_archive: yes
+
+- name: Register JetBrains Mono Nerd Font
+  ansible.windows.win_shell: |
+    $fonts = (New-Object -ComObject Shell.Application).Namespace(0x14)
+    Get-ChildItem "C:\Windows\Fonts\JetBrainsMono*.ttf" | ForEach-Object {
+        $fonts.CopyHere($_.FullName)
+    }
+  args:
+    executable: pwsh.exe
 
 - name: Generate templates
   ansible.builtin.template:
