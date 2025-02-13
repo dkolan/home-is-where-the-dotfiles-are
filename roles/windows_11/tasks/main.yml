@@ -1,4 +1,4 @@
-- name: Install Chocolatey packages as Administrator
+- name: Install Chocolatey packages
   loop:
     - firefox
     - kb2999226
@@ -33,6 +33,7 @@
     params: "-y --verbose --accept-license"
   become: yes
   become_method: runas
+  become_user: Administrator
   loop_control:
     label: "{{ item }}"
   register: choco_results
