@@ -1,4 +1,5 @@
 - name: Install Chocolatey packages
+  ignore_errors: yes
   loop:
     - firefox
     - kb2999226
@@ -18,7 +19,7 @@
     - less
     - llvm
     - pandoc
-    - visualstudio2022professional
+    # - visualstudio2022professional # failed
     - uv
     - epicgameslauncher
     - obsidian
