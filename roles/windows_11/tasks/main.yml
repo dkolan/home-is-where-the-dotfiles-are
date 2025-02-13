@@ -63,6 +63,12 @@
     dest: "C:\\Users\\{{ ansible_env.USERNAME }}\\Documents\\PowerShell\\Microsoft.PowerShell_profile.ps1"
     force: yes
 
+- name: Ensure the community.windows collection is installed
+  ansible.builtin.command: ansible-galaxy collection install community.windows
+  delegate_to: localhost
+  run_once: true
+  changed_when: false
+
 - name: Ensure Windows font directory exists
   ansible.builtin.win_file:
     path: "C:\\Windows\\Fonts"
