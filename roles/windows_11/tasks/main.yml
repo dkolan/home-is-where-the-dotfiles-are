@@ -32,28 +32,53 @@
   ignore_errors: yes
   loop:
     - 7zip
+    - autohotkey.portable
     - bat
+    - brave
+    - carnac
     - cmake
+    - docker-desktop
     - epicgameslauncher
+    - fd
     - firefox
     - fzf
     - git
-    # - greenshot # failing
+    - Ghostscript
+    - glazewm
+    - greenshot
     - gsudo
+    - handle
+    - hwinfo
+    - imagemagick
+    - jq
+    - jujutsu.portable
     - kb2999226
+    - less
     - llvm
+    - mingw
+    - msbuild-structured-log-viewer
+    - neovim
     - ninja
     - obsidian
     - oh-my-posh
     - pandoc
     - powershell-core
     - powertoys
+    - ripgrep
+    - rufus
+    - SQLite
+    - tesseract
+    - tldr
     - tree
     - uv
+    - vcredist140
     - vlc
-    - vscodium
+    - vscode
+    - webview2-runtime
+    - winmerge
     - wireshark
     - wiztree
+    - zebar
     - zoxide
   ansible.builtin.win_chocolatey:
     name: "{{ item }}"
